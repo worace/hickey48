@@ -89,11 +89,20 @@
    ;; w - 87 a - 65 s - 83 d - 68
    87 :up 65 :left 83 :down 68 :right})
 
+(def update-board! (partial swap! app assoc :board))
+
+(defn with-randoms [board]
+  (let [empty-positions (filter (comp not nil?) (for [i (range (count board))] (if (zero? (board i)) i)) )]
+    (assoc board (first (shuffle empty-positions)) (starter-val))))
+
+(defn move [key-code]
+  (let [dir (key-map key-code)]
+    (if dir
+      (update-board!
+       (with-randoms (shift-board dir (@app :board)) )))))
+
 (events/listen js/document "keydown"
-               (fn [e] (let [dir (key-map (.-keyCode e))]
-                         (if dir
-                           (swap! app assoc :board (shift-board dir (@app :board))))
-                         )))
+               (fn [e] (move (.-keyCode e))))
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on your application
