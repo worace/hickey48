@@ -4,13 +4,15 @@
 (enable-console-print!)
 
 (defn starter-val [] (rand-nth [2 4]))
+(defn starter-positions [board-size]
+  (zipmap (take 2 (shuffle (range 0 16)))
+          (take 2 (repeatedly starter-val))))
 
-(defn gen-board []
-  (let [b (into {} (for [i (range 0 16)] {i 0}))
-        start-vals (zipmap (take 2 (shuffle (keys b))) (take 2 (repeatedly starter-val)))]
-    (merge b start-vals)))
+(defn gen-board [board-size]
+  (let [blank-board (into {} (for [i (range 0 board-size)] {i 0}))]
+    (merge blank-board (starter-positions board-size))))
 
-(defn initial-state [] {:text "Hello world!" :board (gen-board)})
+(defn initial-state [] {:text "Hello world!" :board (gen-board 16)})
 
 (defonce app (atom (initial-state)))
 
