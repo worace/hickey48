@@ -24,8 +24,6 @@
 
 (defn set-value! [idx val] (swap! app update-in [:board] assoc idx val))
 
-(defn padded [n coll] (take n (concat coll (repeat 0))))
-
 (defn paired [coll]
   (loop [pairs [] candidate (first coll) coll (rest coll)]
     (if (empty? coll)
@@ -38,6 +36,7 @@
 
 (def non-zero? (partial filter (comp not zero?)))
 
+(defn padded [n coll] (take n (concat coll (repeat 0))))
 (defn shift-group [vals]
   (padded (count vals)
           (map (partial reduce +)
@@ -45,15 +44,33 @@
 
 (defn transpose [matrix] (apply map vector matrix))
 
+(def forward-transforms
+  {:left identity
+   :right reverse
+   :up transpose
+   :down (comp (partial map reverse) transpose)})
+
+(def backward-transforms
+  {:left identity
+   :right reverse
+   :up transpose
+   :down (comp transpose (partial map reverse))})
+
 (defn shift-board [dir board]
   (let [row-size (sqrt (count board))
-        rows (partition row-size board)]
-    (vec (case dir
-      :left (mapcat identity (map shift-group rows))
-      :right (mapcat reverse (map shift-group (map reverse rows)))
-      :up (mapcat identity (transpose (map shift-group (transpose rows ))))
-      :down (mapcat identity (transpose (map reverse (map shift-group (map reverse (transpose rows))))))
-      ))))
+        rows (partition row-size board)
+        forward (forward-transforms dir)
+        backward (backward-transforms dir)]
+    ;; (println "transforming dir: " dir)
+    ;; (println "transformation: " forward)
+    ;; (println "forward transformed: " (forward board))
+    ;; (println "transformed: "  (backward (map shift-group (forward board))))
+    (vec (mapcat identity (case dir
+                            :left (map shift-group rows)
+                            :right (map reverse (map shift-group (map reverse rows)))
+                            :up (transpose (map shift-group (transpose rows)))
+                            :down (transpose (map reverse (map shift-group (map reverse (transpose rows)))))
+                            )))))
 
 (def key-map
   {37 :left 38 :up 39 :right 40 :down
