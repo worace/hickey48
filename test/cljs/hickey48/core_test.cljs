@@ -18,11 +18,6 @@
   (is (= ["c" "d"] (c/get-all {"a" "c" "b" "d"} ["a" "b"])))
   (is (= [1 2] (c/get-all [1 2] [0 1]))))
 
-(deftest test-slices-of
-  (is (= [[0 1] [2 3]] (c/slices-of 2 4)))
-  (is (= [[0 1 2 3]] (c/slices-of 4 4)))
-  (is (= [[0 1] [2 3] [4 5] [6 7]] (c/slices-of 2 8))))
-
 (deftest test-sets-and-gets-vals
   (c/set-value! 5 20)
   (is (= 20 (c/get-value 5))))

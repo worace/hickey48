@@ -25,13 +25,6 @@
 
 (defn get-value [idx] (get-in @app [:board idx]))
 
-(defn slices-of [size total]
-  (partition size (range total))
-  (loop [slices [] r (range 0 total)]
-    (if (empty? r)
-      slices
-      (recur (conj slices (take size r)) (drop size r)))))
-
 (defn get-all [seq keys]
   (for [k keys] (get seq k)))
 
