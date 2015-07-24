@@ -21,6 +21,10 @@
   (is (= 999 (c/get-value 3)))
   (is (th/found-in #"999" (sel1 "#square-3"))))
 
+(deftest test-starts-with-some-squares-filled
+  (c/revert!)
+  (is (> (reduce + (vals (@c/app :board))) 2)))
+
 (defn run-tests []
   (.clear js/console)
   (cljs.test/run-all-tests #"hickey48.*-test"))
