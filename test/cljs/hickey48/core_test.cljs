@@ -12,6 +12,13 @@
 (deftest test-renders-board
   (is (= 16 (count (sel ".square")))))
 
+(deftest test-roots (is (= 9 (c/sqrt 81))))
+
+(deftest test-slices-of
+  (is (= [[0 1] [2 3]] (c/slices-of 2 4)))
+  (is (= [[0 1 2 3]] (c/slices-of 4 4)))
+  (is (= [[0 1] [2 3] [4 5] [6 7]] (c/slices-of 2 8))))
+
 (deftest test-sets-and-gets-vals
   (c/set-value! 5 20)
   (is (= 20 (c/get-value 5))))
@@ -24,6 +31,11 @@
 (deftest test-starts-with-some-squares-filled
   (c/revert!)
   (is (> (reduce + (vals (@c/app :board))) 2)))
+
+;; (deftest test-shifting-left
+;;   (let [b (merge (c/blank-board 16) {0 2 1 2})
+;;         shifted (c/shift :left b)]
+;;     (is (= 4 (shifted 4)))))
 
 (defn run-tests []
   (.clear js/console)
