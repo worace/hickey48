@@ -1,5 +1,6 @@
 (ns ^:figwheel-always hickey48.core
-    (:require [reagent.core :as reagent :refer [atom]]))
+    (:require [reagent.core :as reagent :refer [atom]]
+              [goog.events :as events]))
 
 (enable-console-print!)
 
@@ -81,6 +82,18 @@
 
 (reagent/render-component [root]
                           (. js/document (getElementById "app")))
+
+
+(def key-map
+  {37 :left 38 :up 39 :right 40 :down
+   ;; w - 87 a - 65 s - 83 d - 68
+   87 :up 65 :left 83 :down 68 :right})
+
+(events/listen js/document "keydown"
+               (fn [e] (let [dir (key-map (.-keyCode e))]
+                         (if dir
+                           (swap! app assoc :board (shift-board dir (@app :board))))
+                         )))
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on your application
