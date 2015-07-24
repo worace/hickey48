@@ -21,16 +21,11 @@
   (is (= [0 0 0 0 0 0] (c/blank-board 6))))
 
 (deftest test-starts-with-some-squares-filled
-  (c/revert!)
+  (swap! c/app c/initial-state)
   (is (> (reduce + (@c/app :board)) 2)))
-
-(deftest test-sets-and-gets-vals
-  (c/set-value! 5 20)
-  (is (= 20 (c/get-value 5))))
 
 (deftest test-board-renders-proper-vals
   (c/set-value! 3 999)
-  (is (= 999 (c/get-value 3)))
   (is (th/found-in #"999" (sel1 "#square-3"))))
 
 (deftest test-pairing-values
@@ -67,8 +62,6 @@
 (deftest test-shifting-down
   (let [b (apply assoc (c/blank-board 16) [1 2 5 2])
         shifted (c/shift-board :down b)]
-    (println "start board: " (clojure.string/join "\n" (partition 4 b)))
-    (println "shifted: " (clojure.string/join "\n" (partition 4 shifted)))
     (is (= [0 4 0 0] (take 4 (drop 12 shifted))))))
 
 (defn run-tests []

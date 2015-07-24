@@ -22,11 +22,7 @@
 
 (defonce app (atom (initial-state)))
 
-(defn revert! [] (swap! app initial-state))
-
 (defn set-value! [idx val] (swap! app update-in [:board] assoc idx val))
-
-(defn get-value [idx] (get-in @app [:board idx]))
 
 (defn padded [n coll] (take n (concat coll (repeat 0))))
 
