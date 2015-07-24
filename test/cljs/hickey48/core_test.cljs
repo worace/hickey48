@@ -44,11 +44,11 @@
   (is (= [8 4 0 0] (c/shift-group [4 0 4 4])))
   )
 
-#_(deftest test-shifting-left
+(deftest test-shifting-left
   (let [b (merge (c/blank-board 16) {0 2 1 2})
         shifted (c/shift-board :left b)]
     (println "shifted: " shifted)
-    (is (= 4 (shifted 4)))))
+    (is (= 4 (shifted 0)))))
 
 (defn run-tests []
   (.clear js/console)

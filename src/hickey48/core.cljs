@@ -52,17 +52,12 @@
   ;; 2 2 0 0 -> 4 0 0 0
   (let [row-size (sqrt (count board))
         row-keys (partition row-size (range (count board)))]
-    (map (fn [key-slice]
+    (zipmap
+     (range 0 (count board))
+     (mapcat identity (map (fn [key-slice]
            (shift-group (get-all board key-slice)))
-         row-keys)))
+         row-keys)))))
 
-;; (map (fn [r]
-;;        (println "mapping")
-;;        (shift-group (get-all board r)))
-;;      row-indices)
-;; (for [s (map (fn [r] (get-all board r)) row-indices)]
-;;   (println (get-all board s))
-;;   #_(shift-group (get-all board s)))
 (defn square [[id value]]
   [:div {:class "square" :id (str "square-" id)} [:p value]])
 
