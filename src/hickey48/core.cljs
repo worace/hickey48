@@ -26,16 +26,26 @@
 (defn get-value [idx] (get-in @app [:board idx]))
 
 (defn slices-of [size total]
+  (partition size (range total))
   (loop [slices [] r (range 0 total)]
     (if (empty? r)
       slices
       (recur (conj slices (take size r)) (drop size r)))))
 
-(defn shift [dir board]
+(defn get-all [seq keys]
+  (for [k keys] (get seq k)))
+
+
+(defn shift-group [vals]
+  (println "shift group of: " vals)
+  [])
+
+(defn shift-board [dir board]
   ;; 2 2 0 0 -> 4 0 0 0
   (let [row-size (sqrt (count board))
-        rows (slices (sqrt ))]
-    )
+        row-indices (partition row-size (range (count board)))]
+    (for [s row-indices]
+      (shift-group (get-all board s))))
   {})
 
 (defn square [[id value]]

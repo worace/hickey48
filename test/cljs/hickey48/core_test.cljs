@@ -14,6 +14,10 @@
 
 (deftest test-roots (is (= 9 (c/sqrt 81))))
 
+(deftest test-get-all
+  (is (= ["c" "d"] (c/get-all {"a" "c" "b" "d"} ["a" "b"])))
+  (is (= [1 2] (c/get-all [1 2] [0 1]))))
+
 (deftest test-slices-of
   (is (= [[0 1] [2 3]] (c/slices-of 2 4)))
   (is (= [[0 1 2 3]] (c/slices-of 4 4)))
@@ -32,10 +36,10 @@
   (c/revert!)
   (is (> (reduce + (vals (@c/app :board))) 2)))
 
-;; (deftest test-shifting-left
-;;   (let [b (merge (c/blank-board 16) {0 2 1 2})
-;;         shifted (c/shift :left b)]
-;;     (is (= 4 (shifted 4)))))
+(deftest test-shifting-left
+  (let [b (merge (c/blank-board 16) {0 2 1 2})
+        shifted (c/shift-board :left b)]
+    (is (= 4 (shifted 4)))))
 
 (defn run-tests []
   (.clear js/console)
