@@ -1,7 +1,9 @@
 (ns hickey48.test-helpers
-  (:require [goog.dom :as dom]))
+  (:require [goog.dom :as dom]
+            [reagent.core :as reagent]))
 
 (defn found-in [re div]
+  (reagent/flush)
   (let [res (.-innerHTML div)]
     (if (re-find re res)
       true

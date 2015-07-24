@@ -3,10 +3,22 @@
 
 (enable-console-print!)
 
-(defonce app-state (atom {:text "Hello world!"}))
+(defn gen-board []
+  (into {} (for [i (range 0 16)] {i 0})))
+
+(defonce app (atom {:text "Hello world!"
+                          :board (gen-board)}))
+
+(defn set-value! [idx val]
+  (swap! app update-in [:board] assoc idx val))
+
+(defn get-value [idx] (get-in @app [:board idx]))
+
+(defn square [[id value]]
+  [:div {:class "square" :id (str "square-" id)} [:p value]])
 
 (defn root []
-  [:h1 (:text @app-state)])
+   [:div {:id "game"} (map square (@app :board))])
 
 (reagent/render-component [root]
                           (. js/document (getElementById "app")))
