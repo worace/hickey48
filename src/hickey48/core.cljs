@@ -43,22 +43,7 @@
           (map (partial reduce +)
                (paired (non-zero? vals)))))
 
-(defn transpose [matrix]
-  (apply map vector matrix))
-
-;; shifting in dirs
-;; idea:
-;; identify a series of transformations for each
-;; row that can convert it into the proper series for shifting
-;; maintain those transformations as lists so we can apply
-;; them forward and backward
-;; apply the list forward to get rows and shift
-;; then apply the list backward to revert to original series
-;;
-;; left - identity
-;; right - reverse
-;; up - transpose
-;; down - transpose, then reverse rows
+(defn transpose [matrix] (apply map vector matrix))
 
 (defn shift-board [dir board]
   (let [row-size (sqrt (count board))
@@ -99,9 +84,4 @@
 
 (events/listen js/document "keydown"
                (fn [e] (move (.-keyCode e))))
-
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-)
 
