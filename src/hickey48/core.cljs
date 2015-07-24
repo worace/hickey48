@@ -5,7 +5,7 @@
 (enable-console-print!)
 
 (defn sqrt [n] (.sqrt js/Math n))
-(defn starter-val [] (rand-nth [2 4]))
+(defn starter-val [] (rand-nth [2 2 2 4]))
 (defn starter-positions [board-size]
   "Return a sequence of random indices and starter values
    where indices range the size of the board and starter vals
