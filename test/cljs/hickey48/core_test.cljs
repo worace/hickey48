@@ -31,9 +31,23 @@
   (c/revert!)
   (is (> (reduce + (vals (@c/app :board))) 2)))
 
-(deftest test-shifting-left
+(deftest test-pairing-values
+  (is (= [[2 2] [2]] (c/paired [2 2 2])))
+  (is (= [[2 2]] (c/paired [2 2])))
+  (is (= [[4] [2 2] [8]] (c/paired [4 2 2 8])))
+  )
+
+(deftest test-shifting-groups
+  (is (= [4 0 0 0] (c/shift-group [2 2 0 0])))
+  (is (= [4 0 0 0] (c/shift-group [2 0 0 2])))
+  (is (= [16 0 0 0] (c/shift-group [8 0 8 0])))
+  (is (= [8 4 0 0] (c/shift-group [4 0 4 4])))
+  )
+
+#_(deftest test-shifting-left
   (let [b (merge (c/blank-board 16) {0 2 1 2})
         shifted (c/shift-board :left b)]
+    (println "shifted: " shifted)
     (is (= 4 (shifted 4)))))
 
 (defn run-tests []
