@@ -26,7 +26,6 @@
 (defn get-value [idx] (get-in @app [:board idx]))
 
 (defn get-all [seq keys]
-  (println "getting all " keys " from " seq)
   (for [k keys] (get seq k)))
 
 (defn padded [n coll]
