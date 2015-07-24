@@ -14,9 +14,15 @@
 
 (deftest test-roots (is (= 9 (c/sqrt 81))))
 
-(deftest test-get-all
-  (is (= ["c" "d"] (c/get-all {"a" "c" "b" "d"} ["a" "b"])))
-  (is (= [1 2] (c/get-all [1 2] [0 1]))))
+(deftest test-generating-starter-vals
+  (is (= 4 (count (c/starter-positions 16)))))
+
+(deftest test-makes-blank-board
+  (is (= [0 0 0 0 0 0] (c/blank-board 6))))
+
+(deftest test-starts-with-some-squares-filled
+  (c/revert!)
+  (is (> (reduce + (@c/app :board)) 2)))
 
 (deftest test-sets-and-gets-vals
   (c/set-value! 5 20)
@@ -26,10 +32,6 @@
   (c/set-value! 3 999)
   (is (= 999 (c/get-value 3)))
   (is (th/found-in #"999" (sel1 "#square-3"))))
-
-(deftest test-starts-with-some-squares-filled
-  (c/revert!)
-  (is (> (reduce + (vals (@c/app :board))) 2)))
 
 (deftest test-pairing-values
   (is (= [[2 2] [2]] (c/paired [2 2 2])))
@@ -45,7 +47,7 @@
   )
 
 (deftest test-shifting-left
-  (let [b (merge (c/blank-board 16) {0 2 1 2})
+  (let [b (apply assoc (c/blank-board 16) [0 2 1 2])
         shifted (c/shift-board :left b)]
     (println "shifted: " shifted)
     (is (= 4 (shifted 0)))))

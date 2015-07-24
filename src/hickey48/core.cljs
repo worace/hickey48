@@ -6,13 +6,16 @@
 (defn sqrt [n] (.sqrt js/Math n))
 (defn starter-val [] (rand-nth [2 4]))
 (defn starter-positions [board-size]
-  (zipmap (take 2 (shuffle (range 0 16)))
-          (take 2 (repeatedly starter-val))))
-(defn blank-board [board-size]
-  (into (sorted-map) (for [i (range 0 board-size)] {i 0})))
+  "Return a sequence of random indices and starter values
+   where indices range the size of the board and starter vals
+   are either 2 or 4. e.g. (15 2 3 4) -> index 15 is 2, 3 is 4"
+  (interleave (take 2 (shuffle (range 0 board-size)))
+              (take 2 (repeatedly starter-val))))
+
+(defn blank-board [board-size] (vec (take board-size (repeat 0))))
 
 (defn gen-board [board-size]
-    (merge (blank-board board-size) (starter-positions board-size)))
+    (apply assoc (blank-board board-size) (starter-positions board-size)))
 
 (defn initial-state [] {:text "Hello world!" :board (gen-board 16)})
 
@@ -20,16 +23,11 @@
 
 (defn revert! [] (swap! app initial-state))
 
-(defn set-value! [idx val]
-  (swap! app update-in [:board] assoc idx val))
+(defn set-value! [idx val] (swap! app update-in [:board] assoc idx val))
 
 (defn get-value [idx] (get-in @app [:board idx]))
 
-(defn get-all [seq keys]
-  (for [k keys] (get seq k)))
-
-(defn padded [n coll]
-  (take n (concat coll (repeat 0))))
+(defn padded [n coll] (take n (concat coll (repeat 0))))
 
 (defn paired [coll]
   (loop [pairs [] candidate (first coll) coll (rest coll)]
@@ -50,19 +48,15 @@
 
 (defn shift-board [dir board]
   ;; 2 2 0 0 -> 4 0 0 0
-  (let [row-size (sqrt (count board))
-        row-keys (partition row-size (range (count board)))]
-    (zipmap
-     (range 0 (count board))
-     (mapcat identity (map (fn [key-slice]
-           (shift-group (get-all board key-slice)))
-         row-keys)))))
+  (let [row-size (sqrt (count board))]
+    (vec (mapcat identity
+                 (map shift-group (partition row-size board))))))
 
-(defn square [[id value]]
+(defn square [id value]
   [:div {:class "square" :id (str "square-" id)} [:p value]])
 
 (defn root []
-   [:div {:id "game"} (map square (@app :board))])
+   [:div {:id "game"} (map-indexed square (@app :board))])
 
 (reagent/render-component [root]
                           (. js/document (getElementById "app")))
