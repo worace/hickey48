@@ -1,14 +1,14 @@
-(ns ^:figwheel-always hello-world.core
+(ns ^:figwheel-always hickey48.core
     (:require [reagent.core :as reagent :refer [atom]]))
 
 (enable-console-print!)
 
 (defonce app-state (atom {:text "Hello world!"}))
 
-(defn hello-world []
+(defn root []
   [:h1 (:text @app-state)])
 
-(reagent/render-component [hello-world]
+(reagent/render-component [root]
                           (. js/document (getElementById "app")))
 
 (defn on-js-reload []

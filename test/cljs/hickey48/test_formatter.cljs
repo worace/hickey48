@@ -1,4 +1,4 @@
-(ns hello-world.test-formatter
+(ns hickey48.test-formatter
   (:require
     [cljs.test :as test :include-macros true :refer [report]]))
 

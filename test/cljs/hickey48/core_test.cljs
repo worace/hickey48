@@ -1,10 +1,10 @@
-(ns ^:figwheel-always hello-world.core-test
+(ns ^:figwheel-always hickey48.core-test
   (:require
     [cljs.test :refer-macros [deftest testing is]]
-    [hello-world.test-formatter :as formatter]
+    [hickey48.test-formatter :as formatter]
     [figwheel.client :as fw]
-    [hello-world.test-helpers :as th]
-    [hello-world.core :as hw]))
+    [hickey48.test-helpers :as th]
+    [hickey48.core :as hw]))
 
 (enable-console-print!)
 
@@ -14,18 +14,15 @@
 (deftest test-four
   (is (= 1 1)))
 
-(deftest test-five
-  (is (= 1 1)))
-
 (deftest test-tacos
   (is (= 1 1)))
 
-(deftest test-hello-world
+(deftest test-hickey48
   (is (th/found-in #"Hello" (th/by-id "app"))))
 
 (defn run-tests []
   (.clear js/console)
-  (cljs.test/run-all-tests #"hello-world.*-test"))
+  (cljs.test/run-all-tests #"hickey48.*-test"))
 (run-tests)
 
 ;; FW connection is optional in order to simply run tests,

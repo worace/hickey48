@@ -1,4 +1,4 @@
-(ns hello-world.test-helpers
+(ns hickey48.test-helpers
   (:require [goog.dom :as dom]))
 
 (defn found-in [re div]
@@ -12,5 +12,3 @@
   "Return the element with the passed id."
   [id]
   (dom/getElement (name id)))
-
-(def rflush reagent/flush)
