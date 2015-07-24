@@ -46,11 +46,32 @@
           (map (partial reduce +)
                (paired (non-zero? vals)))))
 
+(defn transpose [matrix]
+  (apply map vector matrix))
+
+;; shifting in dirs
+;; idea:
+;; identify a series of transformations for each
+;; row that can convert it into the proper series for shifting
+;; maintain those transformations as lists so we can apply
+;; them forward and backward
+;; apply the list forward to get rows and shift
+;; then apply the list backward to revert to original series
+;;
+;; left - identity
+;; right - reverse
+;; up - transpose
+;; down - transpose, then reverse rows
+
 (defn shift-board [dir board]
-  ;; 2 2 0 0 -> 4 0 0 0
-  (let [row-size (sqrt (count board))]
-    (vec (mapcat identity
-                 (map shift-group (partition row-size board))))))
+  (let [row-size (sqrt (count board))
+        rows (partition row-size board)]
+    (vec (case dir
+      :left (mapcat identity (map shift-group rows))
+      :right (mapcat reverse (map shift-group (map reverse rows)))
+      :up (mapcat identity (transpose (map shift-group (transpose rows ))))
+      :down (mapcat identity (transpose (map reverse (map shift-group (map reverse (transpose rows))))))
+      ))))
 
 (defn square [id value]
   [:div {:class "square" :id (str "square-" id)} [:p value]])

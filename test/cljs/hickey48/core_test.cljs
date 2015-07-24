@@ -49,8 +49,27 @@
 (deftest test-shifting-left
   (let [b (apply assoc (c/blank-board 16) [0 2 1 2])
         shifted (c/shift-board :left b)]
-    (println "shifted: " shifted)
-    (is (= 4 (shifted 0)))))
+    (is (= [4 0 0 0] (take 4 shifted))))
+  (let [b (apply assoc (c/blank-board 16) [0 4 1 0 2 2 3 2])
+        shifted (c/shift-board :left b)]
+    (is (= [4 4 0 0] (take 4 shifted)))))
+
+(deftest test-shifting-right
+  (let [b (apply assoc (c/blank-board 16) [0 2 1 2])
+        shifted (c/shift-board :right b)]
+    (is (= [0 0 0 4] (take 4 shifted)))))
+
+(deftest test-shifting-up
+  (let [b (apply assoc (c/blank-board 16) [1 2 5 2])
+        shifted (c/shift-board :up b)]
+    (is (= [0 4 0 0] (take 4 shifted)))))
+
+(deftest test-shifting-down
+  (let [b (apply assoc (c/blank-board 16) [1 2 5 2])
+        shifted (c/shift-board :down b)]
+    (println "start board: " (clojure.string/join "\n" (partition 4 b)))
+    (println "shifted: " (clojure.string/join "\n" (partition 4 shifted)))
+    (is (= [0 4 0 0] (take 4 (drop 12 shifted))))))
 
 (defn run-tests []
   (.clear js/console)
