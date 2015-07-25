@@ -36,6 +36,14 @@
                          :output-dir "resources/public/js/compiled/out"
                          :source-map-timestamp true }}
 
+             {:id "prod"
+              :source-paths ["src"]
+
+              :compiler {:main hickey48.core
+                         :asset-path "js/compiled/out"
+                         :output-to "resources/public/js/hickey48.js"
+                         :optimizations :advanced
+                         :source-map-timestamp true }}
 
              {:id "test"
               :source-paths ["src" "test/cljs"]
