@@ -3,6 +3,8 @@
 Using this app to experiment with more clojurescript. Using
 Reagent for rendering the UI via React and `cljs.test` for testing.
 
+__[Live on GH-pages!](http://worace.github.io/hickey48/)__
+
 #### To Run
 
 The project includes 2 builds -- `dev` for building just the app itself
