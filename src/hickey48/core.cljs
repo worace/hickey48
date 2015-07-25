@@ -55,16 +55,6 @@
       :down (mapcat identity (transpose (map reverse (map shift-group (map reverse (transpose rows))))))
       ))))
 
-(defn square [id value]
-  [:div {:class "square" :id (str "square-" id)} [:p value]])
-
-(defn root []
-   [:div {:id "game"} (map-indexed square (@app :board))])
-
-(reagent/render-component [root]
-                          (. js/document (getElementById "app")))
-
-
 (def key-map
   {37 :left 38 :up 39 :right 40 :down
    ;; w - 87 a - 65 s - 83 d - 68
@@ -85,3 +75,14 @@
 (events/listen js/document "keydown"
                (fn [e] (move (.-keyCode e))))
 
+(defn square [id value]
+  [:div {:class "square" :id (str "square-" id)} [:p value]])
+
+(defn root []
+  [:div {:id "game"} (map-indexed square (@app :board))])
+
+(reagent/render-component [root]
+                          (. js/document (getElementById "app")))
+
+;;2 4 8 16 32 64 128 256 512 1028 2048
+;;1 2 3 4  5  6  7   8  9    10   11
