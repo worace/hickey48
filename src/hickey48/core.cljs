@@ -76,7 +76,7 @@
                (fn [e] (move (.-keyCode e))))
 
 (defn square [id value]
-  [:div {:class "square" :id (str "square-" id)} [:p value]])
+  [:div {:class (str "square square-val-" value) :id (str "square-" id)} [:p value]])
 
 (defn root []
   [:div {:id "game"} (map-indexed square (@app :board))])
