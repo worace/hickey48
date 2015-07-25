@@ -24,10 +24,6 @@
   (swap! c/app c/initial-state)
   (is (> (reduce + (@c/app :board)) 2)))
 
-(deftest test-board-renders-proper-vals
-  (c/set-value! 3 999)
-  (is (th/found-in #"999" (sel1 "#square-3"))))
-
 (deftest test-pairing-values
   (is (= [[2 2] [2]] (c/paired [2 2 2])))
   (is (= [[2 2]] (c/paired [2 2])))
