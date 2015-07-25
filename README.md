@@ -5,6 +5,13 @@ Reagent for rendering the UI via React and `cljs.test` for testing.
 
 __[Live on GH-pages!](http://worace.github.io/hickey48/)__
 
+__Todo__
+
+* [ ] Loss / Stuck Detection
+* [ ] Get more photos
+* [ ] change background
+* [ ] get some help/advice on row shifting logic (possible to automate reversing steps for each row?)
+
 #### To Run
 
 The project includes 2 builds -- `dev` for building just the app itself
