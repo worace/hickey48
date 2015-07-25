@@ -19,6 +19,7 @@
             ]
 
   :source-paths ["src"]
+  :uberjar-name "hickey48.jar"
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
@@ -44,6 +45,18 @@
                          :asset-path "js/compiled/test/out"
                          :source-map true
                          :cache-analysis true }}]}
+
+  ;; :uberjar {:source-paths ["env/prod/clj"]
+  ;;           :hooks [leiningen.cljsbuild]
+  ;;           :env {:production true}
+  ;;           :omit-source true
+  ;;           :aot :all
+  ;;           :main deploy-example.server
+  ;;           :cljsbuild {:builds {:app
+  ;;                                {:source-paths ["env/prod/cljs"]
+  ;;                                 :compiler
+  ;;                                 {:optimizations :advanced
+  ;;                                  :pretty-print false}}}}}
 
   :figwheel {
              ;; :http-server-root "public" ;; default and assumes "resources"
