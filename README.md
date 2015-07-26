@@ -11,6 +11,9 @@ __Todo__
 * [ ] Get more photos
 * [ ] change background
 * [ ] get some help/advice on row shifting logic (possible to automate reversing steps for each row?)
+* [ ] Add "new game" button
+* [ ] Experiment with storing game state in cookie
+* [ ] Add play instructions and image explanations/links
 
 #### To Run
 
