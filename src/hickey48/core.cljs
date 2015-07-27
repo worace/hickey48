@@ -9,7 +9,7 @@
 (defn starter-positions [board-size]
   "Return a sequence of random indices and starter values
    where indices range the size of the board and starter vals
-   are either 2 or 4. e.g. (15 2 3 4) -> index 15 is 2, 3 is 4"
+   are either 2 or 4. e.g. (15 2 3 4) -> index 15 is 2, index 3 is 4"
   (interleave (take 2 (shuffle (range 0 board-size)))
               (take 2 (repeatedly starter-val))))
 
@@ -25,11 +25,12 @@
 (defn set-value! [idx val] (swap! app update-in [:board] assoc idx val))
 
 (defn paired [coll]
+  "2048 only allows combining evenly paired groups of same numbers. So trying to combine
+   2 2 2 0, for example, would result in one 4 and one leftover 2: 4 2 0 0. This function
+   walks through a sequence partitioning the numbers into groups of at most 2 of the same value."
   (loop [pairs [] candidate (first coll) coll (rest coll)]
     (if (empty? coll)
       (if candidate (conj pairs [candidate]) pairs)
-      ;; if there is a candidate and its same as me, make a pair and conj to pairs
-      ;; otherwise conj that candidate as a solo group and make me new candidate
       (if (= candidate (first coll))
         (recur (conj pairs [candidate (first coll)]) (second coll) (drop 2 coll))
         (recur (conj pairs [candidate]) (first coll) (rest coll))))))
@@ -44,33 +45,27 @@
 
 (defn transpose [matrix] (apply map vector matrix))
 
-(def forward-transforms
-  {:left identity
-   :right reverse
-   :up transpose
-   :down (comp (partial map reverse) transpose)})
+(def directional-transforms
+  {:left [identity]
+   :right [(partial map reverse)]
+   :up [transpose]
+   :down [(partial map reverse) transpose]})
 
-(def backward-transforms
-  {:left identity
-   :right reverse
-   :up transpose
-   :down (comp transpose (partial map reverse))})
+(defn directional-shift [dir rows]
+  "Each directional shift is defined as a series of transformations onto
+   the 2-d matrix representing the Board. To shift a board in the given direction,
+   we need to a) apply the required transformations; b) shift the groups c) apply
+   the required transformations in reverse in order to get back to the original board layout"
+  (let [transforms (directional-transforms dir)
+        forward (apply comp transforms)
+        backward (apply comp (reverse transforms))]
+    (backward (map shift-group (forward rows)))))
 
 (defn shift-board [dir board]
   (let [row-size (sqrt (count board))
-        rows (partition row-size board)
-        forward (forward-transforms dir)
-        backward (backward-transforms dir)]
-    ;; (println "transforming dir: " dir)
-    ;; (println "transformation: " forward)
-    ;; (println "forward transformed: " (forward board))
-    ;; (println "transformed: "  (backward (map shift-group (forward board))))
-    (vec (mapcat identity (case dir
-                            :left (map shift-group rows)
-                            :right (map reverse (map shift-group (map reverse rows)))
-                            :up (transpose (map shift-group (transpose rows)))
-                            :down (transpose (map reverse (map shift-group (map reverse (transpose rows)))))
-                            )))))
+        rows (partition row-size board)]
+    (vec (mapcat identity (directional-shift dir rows)))))
+
 
 (def key-map
   {37 :left 38 :up 39 :right 40 :down
@@ -100,6 +95,3 @@
 
 (reagent/render-component [root]
                           (. js/document (getElementById "app")))
-
-;;2 4 8 16 32 64 128 256 512 1028 2048
-;;1 2 3 4  5  6  7   8  9    10   11
